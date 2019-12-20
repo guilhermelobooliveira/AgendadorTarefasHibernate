@@ -1,0 +1,76 @@
+package tarefas.infra;
+
+import tarefas.model.Tarefa;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+/**
+ * @author maciel Sandes
+ * @author Guilherme Oliveira
+ */
+public class TarefaDAO {
+    
+    public void salvar(Tarefa tarefa) {
+        //cria um gerenciador de entidades
+        EntityManager em = ConnectionFactory.getEntityManager();
+        try {
+            //abrir uma transacao
+            em.getTransaction().begin();
+            //solicita ao gerenciador que salve a entidade
+            em.persist(tarefa);
+            //fechar a transacao
+            em.getTransaction().commit();
+            System.out.println(em.getTransaction().isActive());
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            //encerra o gerenciador de entidades
+            em.close();
+        }
+    }
+    
+        public List<Tarefa> recuperarTodos() {
+        List<Tarefa> tarefas = new ArrayList<>();
+        
+        try {
+            //cria um gerenciador de entidades
+            EntityManager em = ConnectionFactory.getEntityManager();
+            
+            //solicita ao gerenciador todas as instâncias da classe Curso
+            // Query query = em.createQuery("from Aluno a LEFT JOIN FETCH a.curso");
+            Query query = em.createQuery("from Tarefa");
+            tarefas = query.getResultList();
+            
+            //encerra o gerenciador de entidades
+            em.close();
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return tarefas;
+    }
+       
+        // conta a quantidade de tarefas no banco
+       public List<Tarefa> contaTarefas() {
+        List<Tarefa> tarefas = new ArrayList<>();
+        
+        try {
+            //cria um gerenciador de entidades
+            EntityManager em = ConnectionFactory.getEntityManager();
+            
+            //solicita ao gerenciador todas as instâncias da classe Curso
+            // Query query = em.createQuery("from Aluno a LEFT JOIN FETCH a.curso");
+            Query query = em.createQuery("select count(*) from Tarefa");
+            long count = (Long) query.getSingleResult();
+            
+        //encerra o gerenciador de entidades
+            em.close();
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return tarefas;
+    }
+    
+}
