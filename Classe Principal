@@ -1,0 +1,58 @@
+/*@author maciel Sandes
+ *@author Guilherme Oliveira
+*/
+
+package tarefas.view;
+
+import java.util.List;
+import tarefas.model.*;
+import tarefas.infra.*;
+
+
+/*
+* @author maciel Sandes
+* @author Guilherme Oliveira
+*/
+
+public class Principal {
+    
+    public static void main(String[] args) {
+        
+        // cadastra Tarefa
+        Tarefa tarefa = new Tarefa();
+        tarefa.setDescricao("Terminar trabalho Hibernet");
+        TarefaDAO cdao = new TarefaDAO();
+        cdao.salvar(tarefa);
+        
+        //cadastra Pessoas
+        Pessoa p1 = new Pessoa();
+        p1.setNome("Maciel");  
+        p1.setTarefa(tarefa);
+                
+        Pessoa p2 = new Pessoa();
+        p2.setNome("Guilherme");
+        p2.setTarefa(tarefa);
+        
+        //Salvando pessoas 
+        PessoaDAO fdao = new PessoaDAO();
+        fdao.salvar(p1);
+        fdao.salvar(p2);
+        
+        List <Pessoa> pessoas = fdao.recuperarTodos();
+        pessoas.forEach(System.out::println);
+        
+        
+        // lista os cursos cadastrados
+        List<Tarefa> tarefas = cdao.recuperarTodos();
+        tarefas.forEach(System.out::println);  
+        
+        //Conta a quantidade de pessoas
+        pessoas = fdao.contaPessoas();
+        System.out.println(pessoas);
+        
+        //Conta a quantidade de pessoas
+        tarefas = cdao.contaTarefas();
+        System.out.println(pessoas);        
+    }    
+    
+}
